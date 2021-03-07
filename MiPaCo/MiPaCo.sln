@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiPaCo", "MiPaCo\MiPaCo.csproj", "{6C6E5B51-7135-4C8E-8310-4034F13AE968}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiPaCoTests", "MiPaCoTests\MiPaCoTests.csproj", "{43D396D8-2BD9-4DB2-A788-94D6BDD155EC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6C6E5B51-7135-4C8E-8310-4034F13AE968}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C6E5B51-7135-4C8E-8310-4034F13AE968}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C6E5B51-7135-4C8E-8310-4034F13AE968}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C6E5B51-7135-4C8E-8310-4034F13AE968}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43D396D8-2BD9-4DB2-A788-94D6BDD155EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43D396D8-2BD9-4DB2-A788-94D6BDD155EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43D396D8-2BD9-4DB2-A788-94D6BDD155EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43D396D8-2BD9-4DB2-A788-94D6BDD155EC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {733A9DD7-0658-4EFF-BB64-42D81298E246}
+	EndGlobalSection
+EndGlobal
