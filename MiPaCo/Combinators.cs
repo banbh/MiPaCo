@@ -57,7 +57,7 @@ namespace MiPaCo
             }
         }
 
-        public static Result<T> Result<T>(this T t, string s) => new Result<T>(t, s);
+        public static Result<T> Result<T>(this T t, string s) => new(t, s);
         #endregion
 
         #region Core monadic extension methods
