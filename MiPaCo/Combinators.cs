@@ -40,6 +40,7 @@ namespace MiPaCo
     public static class Combinators
     {
         #region Helper extension methods
+        /// <summary>Returns the first sequence unless it is empty, in which case it returns the second.</summary>
         public static IEnumerable<T> DefaultIfEmpty<T>(this IEnumerable<T> tt, IEnumerable<T> tt2)
         {
             bool empty = true;
@@ -63,7 +64,7 @@ namespace MiPaCo
         #region Core monadic extension methods
         public static Parser<T> Return<T>(T t) => s => Enumerable.Repeat(t.Result(s), 1);
 
-        public static Parser<T> Fail<T>() => s => Enumerable.Empty<Result<T>>();
+        public static Parser<T> Fail<T>() => _ => Enumerable.Empty<Result<T>>();
 
         public static Parser<T2> Bind<T1, T2>(this Parser<T1> p1, Func<T1, Parser<T2>> fp2) => s => p1(s).SelectMany(t1s => fp2(t1s.Value)(t1s.Rest));
         #endregion
