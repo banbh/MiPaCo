@@ -2,19 +2,19 @@
 A Minimal (Monadic) Parser Combinators (MiPaCo) project in C#.
 It is very closely modelled on [Monadic Parsing in Haskell](http://www.cs.nott.ac.uk/~pszgmh/pearl.pdf)
 by Hutton and Meijer.
-In the context of this project *minimal* means hewing as close as possible as possible to the Hutton & Meijer
+In the context of this project *minimal* means hewing as close as possible to the Hutton & Meijer
 paper, and making no concessions to efficiency.
-For example, the parser for a string is modelled on the haskell 
+For example, the parser for a string is modelled on the [Haskell](https://www.haskell.org/)
 `string (c:cs) = do {char c; string cs; return (c:cs)}` and is likewise recursive, even though
 an iterative version would certainly have been more efficient.
-A result of this is the entire library (which is contained in `MiPaCo/Combinators.cs`) is 
+A result of this is that the entire library (which is contained in `MiPaCo/Combinators.cs`) is 
 just a few dozen lines of code (and most of those lines are helpers; the core lines are 
 probably less than a dozen in number).
 Thus one way to use the library is to simply copy the relevant lines into whatever
 project needs them.
 
 The solution contains two examples of using the library: `CalculatorExample` (drawn directly
-from the Hutton & Maijer paper) and `SqlExample` which parses a small subset of SQL 'where'
+from the Hutton & Meijer paper) and `SqlExample` which parses a small subset of SQL 'where'
 clauses into an Abstract Syntax Tree.
 
 ## Design Notes
@@ -31,4 +31,4 @@ the `Or` combinator) requires stepping outside of the query syntax.
 ## Other Projects
 See [Sprache](https://github.com/sprache/Sprache) for another monadic parser combinator library
 in C#.
-It is probably much more efficient than MiPaCo than better suited for serious work.
+It is probably much more efficient than MiPaCo and better suited for serious work.
