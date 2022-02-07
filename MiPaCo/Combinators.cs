@@ -58,6 +58,11 @@ namespace MiPaCo
             }
         }
 
+        /// <summary>Returns at most one item, if possible from the sequence, if not from the second, 
+        /// and otherwise nothing.</summary>
+        public static IEnumerable<T> DefaultIfEmpty1<T>(this IEnumerable<T> tt, IEnumerable<T> tt2) =>
+            tt.Take(1).DefaultIfEmpty(tt2.Take(1));
+
         public static Result<T> Result<T>(this T t, string s) => new(t, s);
         #endregion
 
@@ -83,6 +88,12 @@ namespace MiPaCo
 
         public static Parser<T> OrElse<T>(this Parser<T> p1, Parser<T> p2) => s => p1(s).DefaultIfEmpty(p2(s));
 
+        /// <summary>
+        /// Deterministic `Or`.  Returns at most one result, from the first parser if possible, otherwise from the second.
+        /// </summary>
+        /// <remarks>Corresponds to `(+++)` in Haskell.</remarks>
+        public static Parser<T> Dor<T>(this Parser<T> p1, Parser<T> p2) => s => p1(s).DefaultIfEmpty1(p2(s));
+
         public static Parser<ImmutableList<T>> Many1<T>(this Parser<T> p) => p.Bind(t => p.Many().Select(tt => tt.Insert(0, t)));
 
         public static Parser<ImmutableList<T>> Many<T>(this Parser<T> p) => p.Many1().OrElse(Return(ImmutableList<T>.Empty)); // greedy
@@ -91,7 +102,7 @@ namespace MiPaCo
 
         public static Parser<T> ChainL1<T>(this Parser<T> p, Parser<Func<T, T, T>> op)
         {
-            Parser<T> rest(T t) => grab(t).OrElse(Return(t)); // greedy
+            Parser<T> rest(T t) => grab(t).Dor(Return(t)); // greedy
             Parser<T> grab(T t1) => from f in op
                                     from t2 in p
                                     from x in rest(f(t1, t2))
@@ -112,6 +123,10 @@ namespace MiPaCo
         public static Parser<T> Token<T>(this Parser<T> p) => p.Bind(t => Space.Select(_ => t));
 
         public static Parser<string> Symb(string cs) => Str(cs).Token();
+
+        static readonly Parser<ValueTuple> End = s => (s == "" ? Return(ValueTuple.Create()) : Fail<ValueTuple>())(s);
+
+        public static Parser<T> ToEnd<T>(this Parser<T> p) => from x in p from _ in End select x;
         #endregion
     }
 }

@@ -22,9 +22,9 @@ namespace MiPaCo.Tests
         }
 
         static readonly ComparisonPred
-            a = new ComparisonPred(new IdentifierExpr("a"), Operator.Eq, new NumericExpr(1)),
-            b = new ComparisonPred(new IdentifierExpr("b"), Operator.Eq, new NumericExpr(2)),
-            c = new ComparisonPred(new IdentifierExpr("c"), Operator.Eq, new NumericExpr(3));
+            a = new(new IdentifierExpr("a"), Operator.Eq, new NumericExpr(1)),
+            b = new(new IdentifierExpr("b"), Operator.Eq, new NumericExpr(2)),
+            c = new(new IdentifierExpr("c"), Operator.Eq, new NumericExpr(3));
 
         [TestMethod()]
         public void DisjunctionsPAndAssociativityTest()

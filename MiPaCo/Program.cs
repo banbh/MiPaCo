@@ -31,9 +31,6 @@ namespace MiPaCo
         static Parser<ImmutableList<T>> LazyMany1<T>(this Parser<T> p) => from t in p from tt in p.LazyMany() select tt.Insert(0, t);
         static Parser<ImmutableList<T>> LazyMany<T>(this Parser<T> p) => p.LazyMany1().Or(Return(ImmutableList<T>.Empty));
 
-        static readonly Parser<ValueTuple> End = s => (s == "" ? Return(ValueTuple.Create()) : Fail<ValueTuple>())(s);
-
-        static Parser<T> ToEnd<T>(this Parser<T> p) => from x in p from _ in End select x;
 
         /// <summary>Some examples of lazy (as opposed to greedy) combinators.</summary>
         static void LazyMain()
@@ -47,7 +44,7 @@ namespace MiPaCo
             twoIdents.ParseAndPrint("a ab abc", nameof(twoIdents), "\n"); // 10 different parses with varying amounts left over
             twoIdents.ToEnd().ParseAndPrint(
                 "a ab abc",
-                $"{nameof(twoIdents)}.{nameof(ToEnd)}",
+                $"{nameof(twoIdents)}.{nameof(Combinators.ToEnd)}",
                 "\n"); // only 4 parses since it must, in effect, consume the whole input
         }
 
