@@ -53,14 +53,14 @@ namespace MiPaCo
                                                  select new NumericExpr(double.Parse(string.Concat(cc)))).Token();
 
         static readonly Parser<Operator> OperatorP = Symb("<=").Select(_ => Operator.Lte)
-            .OrElse(Symb(">=").Select(_ => Operator.Gte))
-            .OrElse(Symb("!=").Select(_ => Operator.Neq))
-            .OrElse(Symb("<>").Select(_ => Operator.Neq))
-            .OrElse(Symb(">").Select(_ => Operator.Gt))
-            .OrElse(Symb("<").Select(_ => Operator.Lt))
-            .OrElse(Symb("=").Select(_ => Operator.Eq));
+            .Dor(Symb(">=").Select(_ => Operator.Gte))
+            .Dor(Symb("!=").Select(_ => Operator.Neq))
+            .Dor(Symb("<>").Select(_ => Operator.Neq))
+            .Dor(Symb(">").Select(_ => Operator.Gt))
+            .Dor(Symb("<").Select(_ => Operator.Lt))
+            .Dor(Symb("=").Select(_ => Operator.Eq));
 
-        static readonly Parser<IExpr> ExprP = StringP.OrElse(IdentifierP).OrElse(NumberP).Token();
+        static readonly Parser<IExpr> ExprP = StringP.Dor(IdentifierP).Dor(NumberP).Token();
 
         static readonly Parser<IPredicate> ComparisonP = from lhs in ExprP
                                                          from op in OperatorP
@@ -89,7 +89,7 @@ namespace MiPaCo
                                                     from pred in DisjunctionsP()
                                                     from b2 in Symb(")")
                                                     select pred;
-        static readonly Parser<IPredicate> PredicateP = ComparisonP.OrElse(InParser).OrElse(ParenP);
+        static readonly Parser<IPredicate> PredicateP = ComparisonP.Dor(InParser).Dor(ParenP);
         static readonly Parser<IPredicate> ConjunctionsP = PredicateP.ChainL1(AndP);
         #endregion
 

@@ -11,29 +11,7 @@ namespace MiPaCo
         string Rest { get; }
     }
 
-    public class Result<T> : IResult<T>
-    {
-        private readonly T value;
-        private readonly string rest;
-        public Result(T value, string rest)
-        {
-            this.value = value;
-            this.rest = rest;
-        }
-
-        public T Value => value;
-
-        public string Rest => rest;
-
-        public override bool Equals(object obj) =>
-            obj is Result<T> result &&
-            EqualityComparer<T>.Default.Equals(value, result.value) &&
-            rest == result.rest;
-
-        public override int GetHashCode() => HashCode.Combine(value, rest);
-
-        public override string ToString() => value + (rest == "" ? "" : $" (rest is \"{rest}\")");
-    }
+    public record Result<T>(T Value, string Rest) : IResult<T> { }
 
     public delegate IEnumerable<IResult<T>> Parser<out T>(string s);
 
@@ -86,7 +64,7 @@ namespace MiPaCo
 
         public static Parser<T> Or<T>(this Parser<T> p1, Parser<T> p2) => s => p1(s).Concat(p2(s));
 
-        public static Parser<T> OrElse<T>(this Parser<T> p1, Parser<T> p2) => s => p1(s).DefaultIfEmpty(p2(s));
+        //public static Parser<T> OrElse<T>(this Parser<T> p1, Parser<T> p2) => s => p1(s).DefaultIfEmpty(p2(s));
 
         /// <summary>
         /// Deterministic `Or`.  Returns at most one result, from the first parser if possible, otherwise from the second.
@@ -96,7 +74,7 @@ namespace MiPaCo
 
         public static Parser<ImmutableList<T>> Many1<T>(this Parser<T> p) => p.Bind(t => p.Many().Select(tt => tt.Insert(0, t)));
 
-        public static Parser<ImmutableList<T>> Many<T>(this Parser<T> p) => p.Many1().OrElse(Return(ImmutableList<T>.Empty)); // greedy
+        public static Parser<ImmutableList<T>> Many<T>(this Parser<T> p) => p.Many1().Dor(Return(ImmutableList<T>.Empty)); // greedy
 
         public static Parser<ImmutableList<T>> N<T>(this Parser<T> p, int n) => n <= 0 ? Return(ImmutableList<T>.Empty) : p.Bind(t => p.N(n - 1).Select(tt => tt.Insert(0, t)));
 

@@ -54,15 +54,15 @@ namespace MiPaCo.Tests
             AssertResults(p("1"), 'L', 'D', '1');
         }
 
-        [TestMethod()]
-        public void OrElseTest()
-        {
-            var p = AlphaNumOrDigit.OrElse(Char('1'));
-            AssertResults(p("1"), 'L', 'D'); // in x.OrElse(y), if x returns multiple then it returns all of them
+        //[TestMethod()]
+        //public void OrElseTest()
+        //{
+        //    var p = AlphaNumOrDigit.OrElse(Char('1'));
+        //    AssertResults(p("1"), 'L', 'D'); // in x.OrElse(y), if x returns multiple then it returns all of them
 
-            var q = Char('2').OrElse(AlphaNumOrDigit);
-            AssertResults(q("1"), 'L', 'D'); // in x.OrElse(y), if x returns nothing then it returns all of y
-        }
+        //    var q = Char('2').OrElse(AlphaNumOrDigit);
+        //    AssertResults(q("1"), 'L', 'D'); // in x.OrElse(y), if x returns nothing then it returns all of y
+        //}
 
         [TestMethod()]
         public void DorTest()
