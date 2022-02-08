@@ -17,6 +17,8 @@ namespace MiPaCo
             digit.Many().Select(string.Concat).ParseAndPrint("123a", "digit.Many().Select(string.Concat)");
             Char(c => c != 'x').Many().Select(string.Concat).ParseAndPrint("abcxyz", "Char(c => c != 'x').Many()");
 
+            (from c in AnyChar from _ in AnyChar from d in AnyChar select (c, d)).ParseAndPrint("abcd");
+
             Parser<int> digits(int n) => digit.N(n).Select(string.Concat).Select(int.Parse);
             var separator = Char('-');
             (from yyyy in digits(4)

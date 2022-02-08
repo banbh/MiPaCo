@@ -11,10 +11,10 @@ namespace MiPaCo.Tests
         [TestMethod()]
         public void MainTest()
         {
-            AssertResults(CalculatorExample.Expr("10 - 2  *  ( 1 + 2 )  +  4 "), 10 - 2 * (1 + 2) + 4);
-            AssertResults(CalculatorExample.Expr("10 - 2  *   1 + 2   +  4 "), 10 - 2 * 1 + 2 + 4);
-            AssertResults(CalculatorExample.Expr("(10 - 2)  *  ( 1 + 2 )  +  4 "), (10 - 2) * (1 + 2) + 4);
-            AssertResults(CalculatorExample.Expr("10-(2*1)+2+4"), 10 - (2 * 1) + 2 + 4);
+            That.AssertResults(CalculatorExample.Expr("10 - 2  *  ( 1 + 2 )  +  4 "), expectEmptyRest: true, 10 - 2 * (1 + 2) + 4);
+            That.AssertResults(CalculatorExample.Expr("10 - 2  *   1 + 2   +  4 "), expectEmptyRest: true, 10 - 2 * 1 + 2 + 4);
+            That.AssertResults(CalculatorExample.Expr("(10 - 2)  *  ( 1 + 2 )  +  4 "), expectEmptyRest: true, (10 - 2) * (1 + 2) + 4);
+            That.AssertResults(CalculatorExample.Expr("10-(2*1)+2+4"), expectEmptyRest: true, 10 - (2 * 1) + 2 + 4);
             IsFalse(CalculatorExample.Expr.ToEnd()("21-)34").Any());
         }
     }

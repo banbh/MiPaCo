@@ -88,8 +88,12 @@ namespace MiPaCo
             return p.Bind(rest);
         }
 
+        /// <summary>Consumes on character if there is one, or fails.</summary>
+        /// <remarks>Called `item` item by H&M.</remarks>
         public static readonly Parser<char> AnyChar = s => s == "" ? Fail<char>()(s) : Return(s[0])(s.Remove(0, 1));
 
+        /// <summary>Consumes a character if it satisfies some property</summary>
+        /// <remarks>Called `sat` by H&M.</remarks>
         public static Parser<char> Char(Predicate<char> predicate) => AnyChar.Where(predicate);
 
         public static Parser<char> Char(char c0) => Char(c => c == c0);
