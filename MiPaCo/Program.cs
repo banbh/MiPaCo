@@ -58,6 +58,8 @@ namespace MiPaCo
             // Some more complex examples
             CalculatorExample.Main();
             SqlExample.Main();
+            LambdaCalculusExample.Main();
+            LazyLambdaCalculusExample.Main();
         }
     }
 }
