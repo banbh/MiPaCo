@@ -2,6 +2,7 @@
 
 namespace MiPaCo
 {
+    /// <summary>Extensions methods used only in the example code.</summary>
     public static class ExampleUtilities
     {
         public static void ParseAndPrint<T>(this Parser<T> p, 

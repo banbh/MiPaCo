@@ -19,7 +19,7 @@ namespace MiPaCo
     {
         #region Helper extension methods
         /// <summary>Returns the first sequence unless it is empty, in which case it returns the second.</summary>
-        public static IEnumerable<T> DefaultIfEmpty<T>(this IEnumerable<T> tt, IEnumerable<T> tt2)
+        static IEnumerable<T> DefaultIfEmpty<T>(this IEnumerable<T> tt, IEnumerable<T> tt2)
         {
             bool empty = true;
             foreach (T t in tt)
@@ -53,7 +53,6 @@ namespace MiPaCo
         #endregion
 
         #region Helper parser methods (built from core monadic methods)
-
         public static Parser<T2> SelectMany<T1, T2>(this Parser<T1> p1, Func<T1, Parser<T2>> fp2) => p1.Bind(fp2);
 
         public static Parser<T> SelectMany<T1, T2, T>(this Parser<T1> p1, Func<T1, Parser<T2>> fp2, Func<T1, T2, T> f) => p1.Bind(x => fp2(x).Bind(y => Return(f(x, y))));
@@ -64,12 +63,9 @@ namespace MiPaCo
 
         public static Parser<T> Or<T>(this Parser<T> p1, Parser<T> p2) => s => p1(s).Concat(p2(s));
 
-        //public static Parser<T> OrElse<T>(this Parser<T> p1, Parser<T> p2) => s => p1(s).DefaultIfEmpty(p2(s));
-
-        /// <summary>
-        /// Deterministic `Or`.  Returns at most one result, from the first parser if possible, otherwise from the second.
-        /// </summary>
-        /// <remarks>Corresponds to `(+++)` in Haskell.</remarks>
+        /// <summary>Deterministic version of <see cref="Or"/>. Returns at most one result, from the first 
+        /// parser if possible, otherwise from the second.</summary>
+        /// <remarks>Corresponds to <c>(+++)</c> in H&M.</remarks>
         public static Parser<T> Dor<T>(this Parser<T> p1, Parser<T> p2) => s => p1(s).DefaultIfEmpty1(p2(s));
 
         public static Parser<ImmutableList<T>> Many1<T>(this Parser<T> p) => p.Bind(t => p.Many().Select(tt => tt.Insert(0, t)));
@@ -89,11 +85,11 @@ namespace MiPaCo
         }
 
         /// <summary>Consumes on character if there is one, or fails.</summary>
-        /// <remarks>Called `item` item by H&M.</remarks>
+        /// <remarks>Called <c>item</c> by H&M.</remarks>
         public static readonly Parser<char> AnyChar = s => s == "" ? Fail<char>()(s) : Return(s[0])(s.Remove(0, 1));
 
         /// <summary>Consumes a character if it satisfies some property</summary>
-        /// <remarks>Called `sat` by H&M.</remarks>
+        /// <remarks>Called <c>sat</c> by H&M.</remarks>
         public static Parser<char> Char(Predicate<char> predicate) => AnyChar.Where(predicate);
 
         public static Parser<char> Char(char c0) => Char(c => c == c0);

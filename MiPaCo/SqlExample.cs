@@ -4,6 +4,7 @@ using static MiPaCo.Combinators;
 
 namespace MiPaCo
 {
+    /// <summary>Contains a grammar for a small subset of SQL.</summary>
     public class SqlExample
     {
         #region Simple AST for SQL
@@ -98,18 +99,18 @@ namespace MiPaCo
             Console.WriteLine();
             Console.WriteLine($"=== {typeof(SqlExample)} ===");
 
-            StringP.ParseAndPrint("'abc'xyz", $"{nameof(StringP)}");
-            StringP.ParseAndPrint("'abc''xyz'", $"{nameof(StringP)}");
+            StringP.ParseAndPrint("'abc'xyz", nameof(StringP));
+            StringP.ParseAndPrint("'abc''xyz'", nameof(StringP));
             var ch = Char(c => c != '\'').Or(from q in QuoteP from q2 in QuoteP select q);
             ch.ParseAndPrint("abc");
             ch.ParseAndPrint("''bc");
             ch.ParseAndPrint("'bc");
 
-            ComparisonP.ParseAndPrint("a1 <> 'xx''yy'   ", $"{nameof(ComparisonP)}");
-            InParser.ParseAndPrint("abc in (  1 , 2 , 3 )  ", $"{nameof(InParser)}");
+            ComparisonP.ParseAndPrint("a1 <> 'xx''yy'   ", nameof(ComparisonP));
+            InParser.ParseAndPrint("abc in (  1 , 2 , 3 )  ", nameof(InParser));
 
-            DisjunctionsP().ParseAndPrint("a=1 and b=2", "DisjunctionP()");
-            DisjunctionsP().ParseAndPrint("a = 1 OR b=2 AND c = 3 OR d IN ( 'x' , 'y' , 'z' ) ", "DisjunctionP()");
+            DisjunctionsP().ParseAndPrint("a=1 and b=2", nameof(DisjunctionsP));
+            DisjunctionsP().ParseAndPrint("a = 1 OR b=2 AND c = 3 OR d IN ( 'x' , 'y' , 'z' ) ", nameof(DisjunctionsP));
         }
     }
 }
