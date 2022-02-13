@@ -42,7 +42,7 @@ namespace MiPaCo.Tests
             CollectionAssert.AreEqual(one, Array.Empty<int>().DefaultIfEmpty1(SeqFail(1)).ToList());
         }
 
-        static readonly Parser<char> AlphaNumOrDigit = 
+        static readonly Parser<char> AlphaNumOrDigit =
             (from _ in Char(char.IsLetterOrDigit) select 'L').Or
             (from _ in Char(char.IsDigit) select 'D');
 
@@ -83,12 +83,32 @@ namespace MiPaCo.Tests
         {
             Parser<string> p = Char(char.IsLetter).Many1().Select(string.Concat).Token() // greedy
                 .LazyChainL1(Return<Func<string, string, string>>((x, y) => $"({x}, {y})")); // lazy
-            That.AssertResults(p("f  gg  hhh  iiii   "), 
+            That.AssertResults(p("f  gg  hhh  iiii   "),
                 expectEmptyRest: false,
-                "(((f, gg), hhh), iiii)", 
+                "(((f, gg), hhh), iiii)",
                 "((f, gg), hhh)",
                 "(f, gg)",
                 "f");
+        }
+
+        [TestMethod()]
+        public void ChainL1Test()
+        {
+            var op = Char('-').Select<char, Func<string, string, string>>(c => (x, y) => $"({x} {c} {y})");
+            Parser<string> digit = Char(char.IsDigit).Select(char.ToString);
+            Parser<string> p = digit.ChainL1(op);
+            That.AssertResults(p("1"), true, "1");
+            That.AssertResults(p("1-2-3-4"), true, "(((1 - 2) - 3) - 4)");
+        }
+
+        [TestMethod()]
+        public void ChainR1Test()
+        {
+            var op = Char('^').Select<char, Func<string, string, string>>(c => (x, y) => $"({x} {c} {y})");
+            Parser<string> digit = Char(char.IsDigit).Select(char.ToString);
+            Parser<string> p = digit.ChainR1(op);
+            That.AssertResults(p("1"), true, "1");
+            That.AssertResults(p("1^2^3^4"), true, "(1 ^ (2 ^ (3 ^ 4)))");
         }
     }
 }

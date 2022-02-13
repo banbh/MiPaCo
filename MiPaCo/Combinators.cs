@@ -68,7 +68,9 @@ namespace MiPaCo
         /// <remarks>Corresponds to <c>(+++)</c> in H&M.</remarks>
         public static Parser<T> Dor<T>(this Parser<T> p1, Parser<T> p2) => s => p1(s).DefaultIfEmpty1(p2(s));
 
-        public static Parser<ImmutableList<T>> Many1<T>(this Parser<T> p) => p.Bind(t => p.Many().Select(tt => tt.Insert(0, t)));
+        public static Parser<ImmutableList<T>> Many1<T>(this Parser<T> p) => from t in p
+                                                                             from tt in p.Many()
+                                                                             select tt.Insert(0, t);
 
         public static Parser<ImmutableList<T>> Many<T>(this Parser<T> p) => p.Many1().Dor(Return(ImmutableList<T>.Empty)); // greedy
 
@@ -76,13 +78,20 @@ namespace MiPaCo
 
         public static Parser<T> ChainL1<T>(this Parser<T> p, Parser<Func<T, T, T>> op)
         {
-            Parser<T> rest(T t) => grab(t).Dor(Return(t)); // greedy
-            Parser<T> grab(T t1) => from f in op
-                                    from t2 in p
-                                    from x in rest(f(t1, t2))
-                                    select x;
+            // Given a starting value, x, rest(x) will parse a sequence of "op y1 op y2 op ... op yn"
+            // by parsing the op, then the y1, combining them and calling itself recursively to finish the job.
+            Parser<T> rest(T x) => (from f in op
+                                    from y in p
+                                    select f(x, y)).Bind(rest)
+                                    .Dor(Return(x)); // greedy
             return p.Bind(rest);
         }
+
+        public static Parser<T> ChainR1<T>(this Parser<T> p, Parser<Func<T, T, T>> op) =>
+            (from x in p
+             from f in op
+             from y in p.ChainR1(op)
+             select f(x, y)).Dor(p);
 
         /// <summary>Consumes on character if there is one, or fails.</summary>
         /// <remarks>Called <c>item</c> by H&M.</remarks>
